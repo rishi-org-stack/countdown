@@ -108,34 +108,4 @@ func GetAll()[]bson.M{
 	}
 	return data
 }
-func insertone(val int) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client.Connect(ctx)
-	col.InsertOne(ctx, bson.M{"val": val})
-}
-func get(val int) {
-	data := make([]bson.M, 0)
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client.Connect(ctx)
-	cur, err := col.Find(context.TODO(), bson.M{"val": 8})
-	if err != nil {
-		fmt.Println("not")
-	}
-	defer cur.Close(ctx)
-	for cur.Next(ctx) {
-		var epi bson.M
-		if err = cur.Decode(&epi); err != nil {
-			log.Fatal(err)
-		}
-		data = append(data, epi)
-	}
-	for _, elem := range data {
-		if elem["val"] == val {
-			fmt.Println(elem)
-		}
-}
 
-	fmt.Println(data)
-}
